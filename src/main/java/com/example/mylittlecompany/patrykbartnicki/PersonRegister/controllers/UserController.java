@@ -2,43 +2,52 @@ package com.example.mylittlecompany.patrykbartnicki.PersonRegister.controllers;
 
 import com.example.mylittlecompany.patrykbartnicki.PersonRegister.models.UserOfApplication;
 import com.example.mylittlecompany.patrykbartnicki.PersonRegister.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.security.Principal;
-
-@Controller
+@RestController
 @AllArgsConstructor
-public class UserController {
+public class UserController extends WebMvcConfigurerAdapter {
 
     private UserService userService;
 
+    private ObjectMapper objectMapper;
 
-//    @GetMapping("/hy") //For REST
-//    @ResponseBody
-//    public String hy(){
-//        return "hy";
+//    @GetMapping("/login")
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    public ResponseEntity forUser(UserOfApplication userOfApplication) throws JsonProcessingException {
+//        if (userService.checkUserForLogin(userOfApplication)){
+//            return "login";
+//        }else{
+//            return "badPasswordOrLogin";
+//        }
 //    }
 
-    @GetMapping("/hello")
-    public String forUser(Principal principal, Model model){
-        model.addAttribute("name", principal.getName());
-        return "hello";
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserOfApplication userOfApplication){
+        if (userService.checkUserForLogin(userOfApplication)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }else{
+            return ResponseEntity.ok().build();
+        }
     }
 
-    @GetMapping("/sign_up")
-    public String signUp(Model model){
-        model.addAttribute("user", new UserOfApplication());
-        return "sign_up";
+    @GetMapping("/register")
+    public ResponseEntity signUp() throws JsonProcessingException{
+        return ResponseEntity.ok(objectMapper.writeValueAsString(userService.findAll()));
     }
 
     @PostMapping("/register")
-    public String register(UserOfApplication userOfApplication){
-        userService.addUser(userOfApplication);
-        return "index";
+    public ResponseEntity register(@RequestBody UserOfApplication userOfApplication) {
+        if (userService.addUser(userOfApplication)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 }
