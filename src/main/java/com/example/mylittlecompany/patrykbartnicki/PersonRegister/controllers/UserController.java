@@ -18,16 +18,6 @@ public class UserController extends WebMvcConfigurerAdapter {
 
     private ObjectMapper objectMapper;
 
-//    @GetMapping("/login")
-//    @CrossOrigin(origins = "http://localhost:3000")
-//    public ResponseEntity forUser(UserOfApplication userOfApplication) throws JsonProcessingException {
-//        if (userService.checkUserForLogin(userOfApplication)){
-//            return "login";
-//        }else{
-//            return "badPasswordOrLogin";
-//        }
-//    }
-
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserOfApplication userOfApplication){
         if (userService.checkUserForLogin(userOfApplication)){
