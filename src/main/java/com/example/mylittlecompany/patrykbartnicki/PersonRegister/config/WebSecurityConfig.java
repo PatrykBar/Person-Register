@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors();
+        http.csrf().disable();
     }
 
     @Bean
@@ -32,9 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/register").allowedOrigins(ORIGIN).
-                        allowedMethods("POST", "GET").allowedHeaders("Accept","Content-Type");
+                        allowedMethods("POST", "GET").allowedHeaders("Accept","Content-Type").
+                        allowCredentials(true);
                 registry.addMapping("/login").allowedOrigins(ORIGIN).
-                        allowedMethods("POST").allowedHeaders("Accept","Content-Type");
+                        allowedMethods("POST").allowedHeaders("Accept","Content-Type").
+                        allowCredentials(true);
             }
         };
     }
