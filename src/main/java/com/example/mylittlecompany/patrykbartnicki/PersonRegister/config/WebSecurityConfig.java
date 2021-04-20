@@ -7,6 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,8 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+//        http.csrf().disable();
     }
+
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -32,10 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/register").allowedOrigins(ORIGIN).
-                        allowedMethods("POST", "GET").allowedHeaders("Accept","Content-Type").
+                        allowedMethods("POST", "GET").allowedHeaders("Accept","Content-Type", "X-XSRF-TOKEN").
                         allowCredentials(true);
                 registry.addMapping("/login").allowedOrigins(ORIGIN).
-                        allowedMethods("POST").allowedHeaders("Accept","Content-Type").
+                        allowedMethods("POST").allowedHeaders("Accept","Content-Type", "X-XSRF-TOKEN").
                         allowCredentials(true);
             }
         };
