@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
+import { withRouter } from 'react-router-dom';
 
 import './Login.css';
 
 import RegistrationAlert from './RegistrationAlert.js';
 
 class Login extends Component {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+
     constructor(props) {
         super(props);
+        const { cookies } = props;
+        this.state = {
+            csrfToken: cookies.get('XSRF-TOKEN')
+        };
         this.registrationAlert = React.createRef();
     }
 
@@ -18,12 +30,16 @@ class Login extends Component {
     }
 
     loginUser(username, password) {
+        const {csrfToken} = this.state;
+
         fetch('http://localhost:8080/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': csrfToken,
             },
+            credentials: 'include',
             body: JSON.stringify({
                 username: username,
                 password: password,
@@ -81,4 +97,4 @@ class Login extends Component {
 
 }
 
-export default Login;
+export default withCookies(withRouter(Login));

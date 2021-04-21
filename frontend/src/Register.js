@@ -13,13 +13,12 @@ import RegistrationAlert from './RegistrationAlert.js';
 class Register extends Component {
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
-      };
+    };
 
     constructor(props) {
         super(props);
         const { cookies } = props;
         this.state = {
-              item: this.emptyItem,
               csrfToken: cookies.get('XSRF-TOKEN')
         };
         this.registrationAlert = React.createRef();
