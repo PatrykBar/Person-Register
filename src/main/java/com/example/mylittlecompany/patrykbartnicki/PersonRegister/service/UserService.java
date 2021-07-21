@@ -5,9 +5,7 @@ import com.example.mylittlecompany.patrykbartnicki.PersonRegister.repositories.U
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +21,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<UserOfApplication> findAll(){
+    public List<UserOfApplication> getAllUsers(){
         return userRepository.findAll();
     }
 

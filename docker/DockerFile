@@ -1,0 +1,9 @@
+FROM openjdk:17-jdk-alpine3.13
+
+MAINTAINER Patryk Bartnicki
+
+COPY personregister-*.jar /personregister-*.jar
+
+EXPOSE 8080
+
+CMD [ "java", "-Dspring.datasource.url=mariadb://localhost:3306/registerusers", "-jar", "/personregister-*.jar"]

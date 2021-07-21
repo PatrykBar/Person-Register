@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class UserController extends WebMvcConfigurerAdapter {
 
     private UserService userService;
-
     private ObjectMapper objectMapper;
 
     @PostMapping("/login")
@@ -29,7 +28,7 @@ public class UserController extends WebMvcConfigurerAdapter {
 
     @GetMapping("/register")
     public ResponseEntity signUp() throws JsonProcessingException{
-        return ResponseEntity.ok(objectMapper.writeValueAsString(userService.findAll()));
+        return ResponseEntity.ok(objectMapper.writeValueAsString(userService.getAllUsers()));
     }
 
     @PostMapping("/register")
