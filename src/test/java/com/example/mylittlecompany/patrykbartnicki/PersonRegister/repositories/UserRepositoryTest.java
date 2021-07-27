@@ -1,31 +1,36 @@
 package com.example.mylittlecompany.patrykbartnicki.PersonRegister.repositories;
 
 import com.example.mylittlecompany.patrykbartnicki.PersonRegister.models.UserOfApplication;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
-@DataJpaTest
+@DisplayName("Test cases for user repository")
+@ExtendWith(MockitoExtension.class)
 class UserRepositoryTest {
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
-    @AfterEach
-    void tearDown() {
-        userRepository.deleteAll();
+    private UserOfApplication user;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        user = new UserOfApplication();
     }
 
     @Test
     void shouldFindByUsername() {
         //given
-        UserOfApplication user = new UserOfApplication();
-        user.setId(Long.valueOf(1));
         user.setUsername("papa");
         user.setPassword("115ffff");
         userRepository.save(user);
@@ -34,7 +39,6 @@ class UserRepositoryTest {
         Optional<UserOfApplication> userExist = userRepository.findByUsername("papa");
 
         //then
-        assertThat(userExist.get().getUsername()).isEqualTo("papa");
-
+        verify(userRepository).findByUsername("papa");
     }
 }
